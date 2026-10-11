@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Giants Flag Playbook</title>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Graduate&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: playbook binder — play list on the left, big chalk-field diagram center, "who does what" cards beside it */
+:root{
+  --bg:#EEF1F7; --surface:#FFFFFF; --surface-2:#E3E8F2; --fg:#14213D; --muted:#5A6684;
+  --line:#CDD5E3; --blue:#0B2A72; --red:#B3122E; --accent-fg:#FFFFFF;
+  --field:#2F7A3C; --field-2:#2A6E36; --chalk:rgba(255,255,255,.55); --los:#9CC4FF;
+  --c-L:#F7D23E; --c-S:#F59A45; --c-R:#F3A5C6; --c-H:#4C93FF; --c-Q:#FFFFFF; --c-C:#D3DAE6;
+  --display:"Graduate", "Rockwell", Georgia, serif;
+  --body:"Barlow", "Segoe UI", system-ui, sans-serif;
+  --label:"Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0C1426; --surface:#141E35; --surface-2:#1C2844; --fg:#E8EDF7; --muted:#9AA7C4;
+  --line:#2A3858; --blue:#7FA6FF; --red:#FF5C74; --accent-fg:#0C1426;
+  --field:#24622F; --field-2:#20582A; --chalk:rgba(255,255,255,.45); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C1426; --surface:#141E35; --surface-2:#1C2844; --fg:#E8EDF7; --muted:#9AA7C4;
+  --line:#2A3858; --blue:#7FA6FF; --red:#FF5C74; --accent-fg:#0C1426;
+  --field:#24622F; --field-2:#20582A; --chalk:rgba(255,255,255,.45); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:1400px;margin:0 auto;padding-inline:20px;padding-block:20px 40px}
+header.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.brand{font-family:var(--display);font-size:clamp(24px,3.4vw,36px);color:var(--blue);letter-spacing:.02em;margin:0;line-height:1.1}
+.brand span{color:var(--red)}
+.sub{font-family:var(--label);text-transform:uppercase;letter-spacing:.12em;font-size:13px;color:var(--muted)}
+
+.app{display:grid;grid-template-columns:290px minmax(0,1fr);gap:22px;align-items:start}
+nav.list{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:2px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+nav.list button{all:unset;cursor:pointer;display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:center;padding:8px 10px;border-radius:10px}
+nav.list button:hover{background:var(--surface-2)}
+nav.list button:focus-visible{outline:3px solid var(--blue);outline-offset:1px}
+nav.list button[aria-current="true"]{background:var(--blue);color:var(--accent-fg)}
+.num{font-family:var(--display);font-size:20px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--blue)}
+nav.list button[aria-current="true"] .num{background:var(--accent-fg);color:var(--blue)}
+.li-name{font-weight:600;font-size:15px;line-height:1.2;min-width:0}
+.li-meta{display:block;font-family:var(--label);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.75;margin-top:2px}
+
+main{min-width:0}
+.play-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.big-num{font-family:var(--display);font-size:44px;line-height:1;width:72px;height:72px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;flex:none}
+.head-text{min-width:0;flex:1}
+.play-name{font-family:var(--display);font-size:clamp(24px,3.2vw,36px);line-height:1.1;margin:0;text-wrap:balance}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.chip{font-family:var(--label);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:13.5px;padding:4px 10px;border-radius:999px;background:var(--surface-2);color:var(--fg)}
+.chip.run{background:var(--red);color:#fff}
+.chip.pass{background:var(--blue);color:var(--accent-fg)}
+.chip.note{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.nav-btns{display:flex;gap:8px}
+.btn{all:unset;cursor:pointer;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:15px;padding:10px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--line);color:var(--fg)}
+.btn:hover{background:var(--surface-2)}
+.btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.btn.go{background:var(--red);border-color:var(--red);color:#fff}
+.btn.go:hover{filter:brightness(1.08)}
+
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+.field-card{background:var(--field);border-radius:16px;padding:10px;overflow:hidden}
+svg.field{display:block;width:100%;height:auto;max-height:72vh}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:12px;font-size:14px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend svg{flex:none}
+
+.roles{display:flex;flex-direction:column;gap:8px}
+.roles-title{font-family:var(--label);text-transform:uppercase;letter-spacing:.12em;font-size:13px;color:var(--muted);margin:0 0 2px}
+.role{all:unset;cursor:pointer;display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;align-items:start;padding:10px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.role:hover{border-color:var(--muted)}
+.role:focus-visible{outline:3px solid var(--blue);outline-offset:1px}
+.role[aria-pressed="true"]{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue) inset}
+.dot{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-family:var(--label);font-weight:700;font-size:19px;color:#14213D;border:2px solid #14213D}
+.dot.sq{border-radius:6px}
+.role-who{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ball-tag{background:var(--red);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;letter-spacing:.08em}
+.role-do{font-size:16px;margin-top:2px;min-width:0}
+.hint{font-size:13.5px;color:var(--muted);margin-top:4px}
+
+/* route focus */
+svg.field.focused .r{opacity:.12}
+svg.field.focused .r.on{opacity:1}
+svg.field.focused .pm{opacity:.35}
+svg.field.focused .pm.on{opacity:1}
+.r,.pm{transition:opacity .2s}
+
+@media (max-width:1150px){.stage{grid-template-columns:minmax(0,1fr)}.roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}.roles-title{grid-column:1/-1}}
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  nav.list{position:static;flex-direction:row;overflow-x:auto;gap:6px}
+  nav.list button{grid-template-columns:auto;justify-items:center;text-align:center;min-width:92px;padding:8px}
+  .li-name{font-size:12.5px}
+  .li-meta{display:none}
+  .big-num{width:58px;height:58px;font-size:34px}
+}
+@media (prefers-reduced-motion:reduce){.r,.pm{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1 class="brand">Giants <span>Flag</span> Playbook</h1>
+    <div class="sub">2026 NFL Flag · 11 plays · tap a player to see just their route</div>
+  </header>
+
+  <div class="app">
+    <nav class="list" id="list" aria-label="Plays"></nav>
+
+    <main>
+      <div class="play-head">
+        <div class="big-num" id="bigNum">1</div>
+        <div class="head-text">
+          <h2 class="play-name" id="playName"></h2>
+          <div class="chips" id="chips"></div>
+        </div>
+        <div class="nav-btns">
+          <button class="btn" id="prev" aria-label="Previous play">◀ Prev</button>
+          <button class="btn go" id="runBtn">Run it ▶</button>
+          <button class="btn" id="next" aria-label="Next play">Next ▶</button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div>
+          <div class="field-card">
+            <svg class="field" id="field" viewBox="0 0 600 490" role="img" aria-label="Play diagram"></svg>
+          </div>
+          <div class="legend">
+            <span><svg width="40" height="14"><line x1="2" y1="7" x2="30" y2="7" stroke="currentColor" stroke-width="3"/><path d="M28 2 L37 7 L28 12" fill="none" stroke="currentColor" stroke-width="3"/></svg>Run this way</span>
+            <span><svg width="22" height="18"><path d="M4 3 L18 15 M18 3 L4 15" stroke="currentColor" stroke-width="3"/></svg>Stop here, turn, look for the ball</span>
+            <span><svg width="40" height="14"><line x1="2" y1="7" x2="38" y2="7" stroke="currentColor" stroke-width="3" stroke-dasharray="2 5" stroke-linecap="round"/></svg>Ball is handed or tossed</span>
+            <span><svg width="40" height="14"><line x1="2" y1="7" x2="38" y2="7" stroke="var(--los)" stroke-width="3"/></svg>Line of scrimmage</span>
+          </div>
+        </div>
+
+        <div class="roles" id="roles"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* Coordinates are taken straight from the coach's sheets (pixel x = depth, pixel y = across the field)
+   and converted to the diagram here so the routes keep their original shapes. */
+const PLAYS = [
+ {num:"1", name:"HB Dive", formation:"Slot Right", call:"Run", los:450,
+  players:{L:[455,245],Q:[420,605],C:[462,605],H:[330,612],S:[430,810],R:[455,960]},
+  carrier:"H",
+  routes:[
+   {p:"L",pts:[[600,225],[730,205]],end:"arrow"},
+   {p:"R",pts:[[630,975],[790,990]],end:"arrow"},
+   {p:"H",pts:[[440,650],[540,680]],end:"arrow"},
+   {p:"C",pts:[[600,615],[635,630],[615,642]],end:"arrow"},
+   {p:"S",pts:[[340,730],[300,600],[340,460],[430,385]],end:"arrow"},
+   {ball:true,pts:[[395,640]]}
+  ],
+  roles:{
+   Q:"Take the snap and hand the ball to H.",
+   C:"Snap the ball, run up a few steps, then hook back.",
+   H:"Take the handoff and run straight up the middle, just right of the Center.",
+   L:"Run straight down the field (go route) to pull defenders away.",
+   S:"Run behind H and the QB toward the left side as a fake.",
+   R:"Run straight down the field (go route)."
+  }},
+ {num:"1", name:"HB Dive", formation:"Trips Right", call:"Run", notes:["Trips Right Play 1","Run CT"], los:450,
+  players:{L:[440,800],Q:[420,605],C:[462,605],H:[330,605],S:[430,880],R:[460,965]},
+  carrier:"H",
+  routes:[
+   {p:"C",pts:[[600,640],[685,680]],end:"arrow"},
+   {p:"H",pts:[[390,550],[430,500]],end:"arrow"},
+   {p:"L",pts:[[620,830],[760,860]],end:"arrow"},
+   {p:"S",pts:[[590,925],[700,962]],end:"arrow"},
+   {p:"R",pts:[[620,1020],[750,1075]],end:"arrow"},
+   {ball:true,pts:[[372,575]]}
+  ],
+  roles:{
+   Q:"Take the snap and hand the ball to H.",
+   C:"Snap the ball, then run down the field angling right.",
+   H:"Take the handoff and run up the middle, just left of the Center.",
+   L:"Run down the field angling right. Take your defender away from the middle.",
+   S:"Run down the field angling right.",
+   R:"Run down the field angling right, toward the sideline."
+  }},
+ {num:"2", name:"Fake HB Dive Slot Reverse", formation:"Slot Right", call:"Run", los:450,
+  players:{L:[460,245],Q:[420,605],C:[462,605],H:[330,612],S:[430,810],R:[455,960]},
+  carrier:"S",
+  routes:[
+   {p:"L",pts:[[600,225],[705,215]],end:"arrow"},
+   {p:"R",pts:[[600,975],[705,990]],end:"arrow"},
+   {p:"H",pts:[[450,680],[550,720]],end:"arrow"},
+   {p:"C",pts:[[590,615],[630,627],[610,642]],end:"arrow"},
+   {p:"S",pts:[[340,730],[295,600],[340,450],[465,355]],end:"arrow"},
+   {ball:true,pts:[[318,592]]}
+  ],
+  roles:{
+   Q:"Take the snap, fake the handoff to H, then hand the ball to S as he comes around behind you.",
+   C:"Snap the ball, run up a few steps, then hook back.",
+   H:"Fake it! Run hard up the middle like you have the ball.",
+   L:"Run straight down the field (go route).",
+   S:"Run behind the QB, take the handoff, and run around the left side.",
+   R:"Run straight down the field (go route)."
+  }},
+ {num:"3", name:"Pass", formation:"Slot Right", call:"Pass", los:450,
+  players:{L:[450,245],Q:[420,605],C:[462,605],H:[325,612],S:[425,810],R:[455,960]},
+  routes:[
+   {p:"L",pts:[[560,245],[585,262],[575,282]],end:"x"},
+   {p:"C",pts:[[600,610],[625,596],[612,582]],end:"x"},
+   {p:"S",pts:[[335,720],[285,600],[335,420],[410,350]],end:"arrow"},
+   {p:"H",pts:[[470,690],[590,740],[610,720]],end:"x"},
+   {p:"R",pts:[[570,960],[605,945],[590,925]],end:"x"}
+  ],
+  roles:{
+   Q:"Take the snap and look for an open receiver.",
+   C:"Snap the ball, run up the middle, then curl back toward the QB.",
+   H:"Run out to the right and up the field, then curl back.",
+   L:"Run up the field, then curl back toward the QB.",
+   S:"Swing around behind the backfield out to the left side.",
+   R:"Run up the field, then curl back toward the QB."
+  }},
+ {num:"4", name:"Run Pass Option Half Back Toss", formation:"Slot Right", call:"Run or Pass", los:450,
+  players:{L:[445,245],Q:[420,600],C:[462,605],H:[320,605],S:[430,810],R:[455,960]},
+  carrier:"H",
+  routes:[
+   {ball:true,pts:[[340,680]]},
+   {p:"H",pts:[[325,700],[330,760]],end:"arrow",sharp:true},
+   {p:"Q",pts:[[480,520],[530,470],[540,440]],end:"x"},
+   {p:"C",pts:[[595,615],[620,640],[605,655]],end:"x"},
+   {p:"L",pts:[[515,260],[740,740]],end:"arrow",sharp:true},
+   {p:"S",pts:[[570,810],[585,835],[570,850]],end:"x"},
+   {p:"R",pts:[[575,962],[575,1050]],end:"arrow",sharp:true}
+  ],
+  roles:{
+   Q:"Take the snap and toss the ball back to H. Then sneak out to the left and get open.",
+   C:"Snap the ball, run up the middle, then hook back.",
+   H:"Catch the toss and run to the right. Your choice: if there's room, run it. If a teammate is open, throw it.",
+   L:"Run up two steps, then go deep across the middle toward the right.",
+   S:"Run up the field, then curl back.",
+   R:"Run up the field, then cut out to the right sideline."
+  }},
+ {num:"5", name:"Fake HB Dive, Fake Slot Reverse, End Around Handoff", formation:"Slot Right", call:"Reverse Run", los:450,
+  players:{L:[440,245],Q:[420,605],C:[462,605],H:[330,612],S:[420,810],R:[455,960]},
+  carrier:"L",
+  routes:[
+   {p:"H",pts:[[450,690],[560,730]],end:"arrow"},
+   {p:"S",pts:[[330,720],[290,600],[320,470],[380,400]],end:"arrow"},
+   {p:"L",pts:[[330,350],[262,520],[255,700],[300,900],[430,1100]],end:"arrow"},
+   {p:"C",pts:[[590,612],[625,625],[605,640]],end:"arrow"},
+   {ball:true,pts:[[275,500]]}
+  ],
+  roles:{
+   Q:"Take the snap. Fake to H, fake to S, then hand the ball to L coming around behind.",
+   C:"Snap the ball, run up a few steps, then hook back.",
+   H:"Fake it! Run up the middle like you have the ball.",
+   L:"Run back behind everybody from the left side, take the handoff, and run around the right end.",
+   S:"Fake the reverse. Run behind the QB toward the left side.",
+   R:"No route drawn on the sheet."
+  }},
+ {num:"6", name:"Hitches", formation:"Slot Right – Empty", call:"Pass", notes:["3 Step Drop"], los:450,
+  players:{L:[445,245],H:[440,440],Q:[430,600],C:[465,600],S:[430,810],R:[455,955]},
+  routes:[
+   {p:"L",pts:[[590,245],[565,258]],end:"arrow",sharp:true},
+   {p:"H",pts:[[590,440],[565,453]],end:"arrow",sharp:true},
+   {p:"C",pts:[[590,600],[565,613]],end:"arrow",sharp:true},
+   {p:"S",pts:[[590,810],[565,797]],end:"arrow",sharp:true},
+   {p:"R",pts:[[590,955],[565,942]],end:"arrow",sharp:true}
+  ],
+  roles:{
+   Q:"Take the snap, take 3 steps back, and throw to whoever is open first.",
+   C:"Snap the ball, run up about 6 yards, stop, and turn back to the QB.",
+   H:"Line up on the line. Run up about 6 yards, stop, and turn back to the QB.",
+   L:"Run up about 6 yards, stop, and turn back to the QB.",
+   S:"Run up about 6 yards, stop, and turn back to the QB.",
+   R:"Run up about 6 yards, stop, and turn back to the QB."
+  }},
+ {num:"7", name:"Delay Pass", formation:"Slot Right", call:"Pass", los:450,
+  players:{L:[445,245],Q:[420,605],C:[462,605],H:[310,615],S:[430,810],R:[455,955]},
+  routes:[
+   {p:"L",pts:[[560,245],[630,260],[640,300]],end:"x"},
+   {p:"H",pts:[[300,540],[320,485]],end:"x"},
+   {p:"C",pts:[[570,620],[680,705]],end:"x",sharp:true},
+   {p:"S",pts:[[580,812],[560,790],[545,775]],end:"x"},
+   {p:"R",pts:[[600,955],[625,970],[605,975]],end:"x"}
+  ],
+  roles:{
+   Q:"Take the snap and look for an open receiver.",
+   C:"Snap the ball, run up the middle, then angle right and deeper.",
+   H:"Step out to the left behind the line.",
+   L:"Run deep, then curve in toward the middle.",
+   S:"Run up the field, then turn back in toward the QB.",
+   R:"Run up the field, then curl back."
+  }},
+ {num:"8", name:"Split End Pass", formation:"Trips Right", call:"Pass", los:450,
+  players:{L:[445,190],Q:[380,668],C:[455,665],H:[440,790],S:[445,880],R:[455,965]},
+  carrier:"R",
+  routes:[
+   {p:"L",pts:[[590,190],[615,640]],end:"arrow",sharp:true},
+   {p:"C",pts:[[530,665],[580,725]],end:"arrow",sharp:true},
+   {p:"H",pts:[[545,795],[540,815],[525,805]],end:"x"},
+   {p:"S",pts:[[750,880]],end:"arrow"},
+   {p:"R",pts:[[320,945]],end:"arrow"},
+   {ball:true,pts:[[340,800],[310,935]]}
+  ],
+  roles:{
+   Q:"Take the snap and throw the ball backward to R.",
+   C:"Snap the ball, run up a few steps, then slant to the right.",
+   H:"Run up a few steps and hook back.",
+   L:"Run up the field, then cut across the middle.",
+   S:"Run straight down the field, deep.",
+   R:"Step back behind the line and catch the backward pass from the QB. Then look to throw it down the field."
+  }},
+ {num:"9", name:"Bootleg Pass Right", formation:"Slot Left", call:"Pass", los:450,
+  players:{L:[430,180],S:[415,410],C:[440,585],Q:[350,568],H:[260,560],R:[430,905]},
+  routes:[
+   {p:"L",pts:[[520,185],[830,540]],end:"arrow",sharp:true},
+   {p:"S",pts:[[490,412],[690,790]],end:"arrow",sharp:true},
+   {p:"R",pts:[[790,935]],end:"arrow"},
+   {p:"H",pts:[[300,750],[420,900],[560,1010],[670,1085]],end:"arrow"},
+   {p:"Q",pts:[[310,640],[290,760],[280,900]],end:"arrow"}
+  ],
+  roles:{
+   Q:"Take the snap and roll out to the right behind the line. Look to throw.",
+   C:"Snap the ball. No route drawn on the sheet.",
+   H:"Run out to the right, then turn up the right sideline.",
+   L:"Run up a few steps, then go deep toward the middle.",
+   S:"Run up a few steps, then go deep across the field to the right.",
+   R:"Run straight down the field, deep."
+  }},
+ {num:"10", name:"End Motion Reverse Handoff", formation:"Overload Right", call:"Run", los:375,
+  players:{Q:[300,515],C:[375,515],L:[380,740],H:[380,825],S:[380,905],R:[380,990]},
+  carrier:"R",
+  routes:[
+   {p:"R",pts:[[348,960],[350,750],[352,520],[400,350],[520,265],[690,245]],end:"arrow"},
+   {p:"C",pts:[[590,530]],end:"arrow"},
+   {p:"L",pts:[[510,740],[515,600],[545,590]],end:"arrow",sharp:true},
+   {p:"H",pts:[[580,830],[690,715]],end:"arrow",sharp:true},
+   {p:"S",pts:[[570,905],[580,880],[545,880]],end:"x"}
+  ],
+  roles:{
+   Q:"Take the snap and hand the ball to R as he runs past you.",
+   C:"Snap the ball and run straight up the field.",
+   H:"Run up the field, then angle in to the left.",
+   L:"Run up a few steps, then cut in to the left.",
+   S:"Run up the field and hook back.",
+   R:"Go in motion toward the QB before the snap. Take the handoff, keep running all the way to the left side, then turn up the left sideline."
+  }}
+];
+
+const POS = {Q:"Quarterback",C:"Center",H:"Halfback",L:"Receiver",S:"Receiver",R:"Receiver"};
+const ORDER = ["Q","C","H","L","S","R"];
+const COLOR = p => `var(--c-${p})`;
+const NS = "http://www.w3.org/2000/svg";
+const LOS_Y = 330, YD = 110*0.72/5; // 5 yards = 110px on the sheets
+
+const T = ([ix,iy],los) => [40+(iy-150)*0.547, LOS_Y-(ix-los)*0.72];
+
+function pathD(pts, sharp){
+  if(sharp || pts.length<3) return "M"+pts.map(p=>p.join(",")).join(" L");
+  let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=0;i<pts.length-1;i++){
+    const p0=pts[i-1]||pts[i], p1=pts[i], p2=pts[i+1], p3=pts[i+2]||p2;
+    const c1=[p1[0]+(p2[0]-p0[0])/6, p1[1]+(p2[1]-p0[1])/6];
+    const c2=[p2[0]-(p3[0]-p1[0])/6, p2[1]-(p3[1]-p1[1])/6];
+    d+=` C${c1[0]},${c1[1]} ${c2[0]},${c2[1]} ${p2[0]},${p2[1]}`;
+  }
+  return d;
+}
+const el=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent&&parent.appendChild(e);return e;};
+
+const svg=document.getElementById("field");
+let cur=0, focus=null, anim=null;
+
+function drawField(){
+  el("rect",{x:0,y:0,width:600,height:490,fill:"var(--field)"},svg);
+  // alternating 5-yard bands
+  for(let k=-2;k<=4;k++){
+    const y=LOS_Y-k*5*YD;
+    if(k%2===0) el("rect",{x:0,y:y-5*YD,width:600,height:5*YD,fill:"var(--field-2)"},svg);
+  }
+  for(let k=-2;k<=4;k++){
+    const y=LOS_Y-k*5*YD;
+    if(y<0||y>490) continue;
+    if(k!==0) el("line",{x1:0,y1:y,x2:600,y2:y,stroke:"var(--chalk)","stroke-width":1.5},svg);
+    if(k>0){
+      const t=el("text",{x:12,y:y-6,fill:"var(--chalk)","font-family":"Barlow Condensed, sans-serif","font-size":15,"font-weight":600},svg);
+      t.textContent=`${k*5} yds`;
+    }
+  }
+  el("line",{x1:0,y1:LOS_Y,x2:600,y2:LOS_Y,stroke:"var(--los)","stroke-width":3.5},svg);
+  const up=el("text",{x:588,y:22,fill:"var(--chalk)","text-anchor":"end","font-family":"Barlow Condensed, sans-serif","font-size":15,"font-weight":600,"letter-spacing":"1"},svg);
+  up.textContent="DOWNFIELD ↑";
+}
+
+function arrowHead(path,color,g){
+  const L=path.getTotalLength(), a=path.getPointAtLength(L), b=path.getPointAtLength(Math.max(0,L-10));
+  const ang=Math.atan2(a.y-b.y,a.x-b.x), s=13, w=0.5;
+  const p1=[a.x-s*Math.cos(ang-w), a.y-s*Math.sin(ang-w)], p2=[a.x-s*Math.cos(ang+w), a.y-s*Math.sin(ang+w)];
+  const d=`M${p1} L${a.x},${a.y} L${p2}`;
+  el("path",{d,fill:"none",stroke:"rgba(10,20,40,.55)","stroke-width":7,"stroke-linecap":"round","stroke-linejoin":"round"},g);
+  el("path",{d,fill:"none",stroke:color,"stroke-width":4,"stroke-linecap":"round","stroke-linejoin":"round"},g);
+}
+function xMark(path,color,g){
+  const L=path.getTotalLength(), a=path.getPointAtLength(L), s=8;
+  const d=`M${a.x-s},${a.y-s} L${a.x+s},${a.y+s} M${a.x+s},${a.y-s} L${a.x-s},${a.y+s}`;
+  el("path",{d,stroke:"rgba(10,20,40,.6)","stroke-width":8,"stroke-linecap":"round"},g);
+  el("path",{d,stroke:color,"stroke-width":4.5,"stroke-linecap":"round"},g);
+}
+
+function render(){
+  if(anim){cancelAnimationFrame(anim);anim=null;}
+  const P=PLAYS[cur];
+  svg.innerHTML=""; drawField();
+  svg.setAttribute("aria-label",`Play ${P.num}: ${P.name}, ${P.formation} formation`);
+  const routeLayer=el("g",{},svg), playerLayer=el("g",{},svg);
+  P._paths=[];
+
+  P.routes.forEach(r=>{
+    const owner=r.ball?"Q":r.p;
+    const start=T(P.players[owner],P.los);
+    const pts=[start,...r.pts.map(p=>T(p,P.los))];
+    const g=el("g",{class:"r","data-p":r.ball?"ball":owner},routeLayer);
+    const d=pathD(pts,r.sharp);
+    if(r.ball){
+      el("path",{d,fill:"none",stroke:"#FFF3C4","stroke-width":4,"stroke-dasharray":"1 9","stroke-linecap":"round"},g);
+      g.classList.add("ball-r");
+      const path=g.lastChild; P._paths.push({p:"ball",path,ball:true});
+      return;
+    }
+    const color=COLOR(owner);
+    el("path",{d,fill:"none",stroke:"rgba(10,20,40,.45)","stroke-width":7,"stroke-linecap":"round","stroke-linejoin":"round"},g);
+    const path=el("path",{d,fill:"none",stroke:color,"stroke-width":4,"stroke-linecap":"round","stroke-linejoin":"round"},g);
+    if(r.end==="arrow") arrowHead(path,color,g);
+    if(r.end==="x") xMark(path,color,g);
+    P._paths.push({p:owner,path});
+  });
+
+  ORDER.forEach(id=>{
+    if(!P.players[id]) return;
+    const [x,y]=T(P.players[id],P.los);
+    const g=el("g",{class:"pm","data-p":id,transform:`translate(${x},${y})`},playerLayer);
+    if(P.carrier===id) el("circle",{r:23,fill:"none",stroke:"#FFF3C4","stroke-width":3,"stroke-dasharray":"4 4"},g);
+    if(id==="C") el("rect",{x:-15,y:-15,width:30,height:30,rx:4,fill:COLOR(id),stroke:"#14213D","stroke-width":2.5},g);
+    else el("circle",{r:16,fill:COLOR(id),stroke:"#14213D","stroke-width":2.5},g);
+    const t=el("text",{y:6.5,"text-anchor":"middle","font-family":"Barlow Condensed, sans-serif","font-weight":700,"font-size":19,fill:"#14213D"},g);
+    t.textContent=id;
+  });
+
+  applyFocus();
+
+  // header
+  document.getElementById("bigNum").textContent=P.num;
+  document.getElementById("playName").textContent=P.name;
+  const chips=document.getElementById("chips"); chips.innerHTML="";
+  const cls=/pass/i.test(P.call)&&!/run/i.test(P.call)?"pass":/run/i.test(P.call)&&!/pass/i.test(P.call)?"run":"";
+  const mk=(txt,c)=>{const s=document.createElement("span");s.className="chip "+(c||"");s.textContent=txt;chips.appendChild(s);};
+  mk(P.call,cls); mk("Formation: "+P.formation);
+  (P.notes||[]).forEach(n=>mk(n,"note"));
+
+  // roles
+  const roles=document.getElementById("roles"); roles.innerHTML="";
+  const h=document.createElement("p"); h.className="roles-title"; h.textContent="Who does what"; roles.appendChild(h);
+  ORDER.forEach(id=>{
+    if(!P.players[id]) return;
+    const b=document.createElement("button"); b.className="role"; b.dataset.p=id;
+    b.setAttribute("aria-pressed",focus===id?"true":"false");
+    b.innerHTML=`<div class="dot ${id==="C"?"sq":""}" style="background:${COLOR(id)}">${id}</div>
+      <div style="min-width:0"><div class="role-who">${POS[id]}${P.carrier===id?'<span class="ball-tag">Gets the ball</span>':''}</div>
+      <div class="role-do"></div></div>`;
+    b.querySelector(".role-do").textContent=P.roles[id];
+    b.addEventListener("click",()=>{focus=(focus===id?null:id);applyFocus();});
+    roles.appendChild(b);
+  });
+  const hint=document.createElement("div"); hint.className="hint";
+  hint.textContent="Tap a player to show only their route. Tap again to show everyone.";
+  roles.appendChild(hint);
+
+  // list
+  document.querySelectorAll("#list button").forEach((b,i)=>b.setAttribute("aria-current",i===cur?"true":"false"));
+  try{history.replaceState(null,"","#p"+(cur+1));}catch(e){}
+}
+
+function applyFocus(){
+  svg.classList.toggle("focused",!!focus);
+  svg.querySelectorAll(".r,.pm").forEach(n=>{
+    const p=n.dataset.p;
+    n.classList.toggle("on", p===focus || (p==="ball" && focus==="Q"));
+  });
+  document.querySelectorAll(".role").forEach(b=>b.setAttribute("aria-pressed",b.dataset.p===focus?"true":"false"));
+}
+
+function runPlay(){
+  const P=PLAYS[cur];
+  if(anim) cancelAnimationFrame(anim);
+  render();
+  const movers=P._paths.map(o=>{
+    if(o.ball){
+      const dot=el("ellipse",{rx:7,ry:4.5,fill:"#8B4A1F",stroke:"#FFF3C4","stroke-width":1.5},svg);
+      return {...o,node:dot,len:o.path.getTotalLength(),dur:700,delay:250};
+    }
+    const node=svg.querySelector(`.pm[data-p="${o.p}"]`);
+    return {...o,node,len:o.path.getTotalLength(),dur:2400,delay:0};
+  });
+  const t0=performance.now();
+  const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  function step(now){
+    let done=true;
+    movers.forEach(m=>{
+      let t=(now-t0-m.delay)/m.dur; if(t<1) done=false; t=Math.max(0,Math.min(1,t));
+      const pt=m.path.getPointAtLength(ease(t)*m.len);
+      if(m.ball) m.node.setAttribute("cx",pt.x),m.node.setAttribute("cy",pt.y),m.node.style.opacity=(t>0&&t<1)?1:0;
+      else m.node.setAttribute("transform",`translate(${pt.x},${pt.y})`);
+    });
+    if(!done) anim=requestAnimationFrame(step); else anim=null;
+  }
+  anim=requestAnimationFrame(step);
+}
+
+// list
+const list=document.getElementById("list");
+PLAYS.forEach((P,i)=>{
+  const b=document.createElement("button");
+  b.innerHTML=`<span class="num">${P.num}</span><span class="li-name"></span>`;
+  b.querySelector(".li-name").textContent=P.name;
+  const m=document.createElement("span"); m.className="li-meta"; m.textContent=`${P.call} · ${P.formation}`;
+  b.querySelector(".li-name").appendChild(m);
+  b.addEventListener("click",()=>{cur=i;focus=null;render();});
+  list.appendChild(b);
+});
+const go=d=>{cur=(cur+d+PLAYS.length)%PLAYS.length;focus=null;render();};
+document.getElementById("prev").onclick=()=>go(-1);
+document.getElementById("next").onclick=()=>go(1);
+document.getElementById("runBtn").onclick=runPlay;
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight") go(1);
+  else if(e.key==="ArrowLeft") go(-1);
+  else if(e.key===" "&&e.target===document.body){e.preventDefault();runPlay();}
+});
+const m=location.hash.match(/^#p(\d+)$/); if(m){const n=+m[1]-1;if(n>=0&&n<PLAYS.length)cur=n;}
+render();
+</script>
+</body>
+</html>
