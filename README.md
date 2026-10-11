@@ -1,4 +1,4 @@
-# Giants Flag Playbook
+# Giants Flag Football Play Book
 
 The 2026 Giants NFL Flag football playbook, redrawn as an easy-to-read web page.
 
